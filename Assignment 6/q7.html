@@ -1,0 +1,47 @@
+<!-- ...existing code... -->
+<h2>Enter Date (DD/MM/YYYY)</h2>
+<form id="dateForm">
+  <label>
+    Date:
+    <input type="text" id="dateInput" placeholder="DD/MM/YYYY" required />
+    <span id="dateMsg" class="error"></span>
+  </label><br><br>
+  <button type="submit">Submit</button>
+</form>
+<!-- ...existing code... -->
+<script>
+  // ...existing code...
+
+  const dateForm = document.getElementById('dateForm');
+  const dateInput = document.getElementById('dateInput');
+  const dateMsg = document.getElementById('dateMsg');
+
+  function validateDateFormat() {
+    const regex = /^\d{2}\/\d{2}\/\d{4}$/;
+    if (dateInput.value.trim() === '') {
+      dateMsg.textContent = '';
+      return false;
+    }
+    if (regex.test(dateInput.value)) {
+      dateMsg.textContent = '';
+      return true;
+    } else {
+      dateMsg.textContent = 'Date must be in DD/MM/YYYY format.';
+      dateMsg.style.color = 'red';
+      return false;
+    }
+  }
+
+  dateForm.addEventListener('submit', function(e) {
+    if (!validateDateFormat()) {
+      e.preventDefault();
+      dateMsg.textContent = 'Date must be in DD/MM/YYYY format.';
+      dateMsg.style.color = 'red';
+    }
+  });
+
+  dateInput.addEventListener('input', validateDateFormat);
+
+  // ...existing code...
+</script>
+<!--

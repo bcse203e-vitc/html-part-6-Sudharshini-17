@@ -1,0 +1,54 @@
+<!-- ...existing code... -->
+<h2>Hexadecimal Color Code</h2>
+<form id="colorForm">
+  <label>
+    Color Code:
+    <input type="text" id="colorInput" placeholder="#FFF or #FFFFFF" required />
+    <span id="colorMsg" class="error"></span>
+  </label>
+  <div id="colorPreview" style="display:inline-block; width:40px; height:40px; border:1px solid #ccc; vertical-align:middle; margin-left:10px;"></div>
+  <br><br>
+  <button type="submit">Submit</button>
+</form>
+<!-- ...existing code... -->
+<script>
+  // ...existing code...
+
+  const colorInput = document.getElementById('colorInput');
+  const colorMsg = document.getElementById('colorMsg');
+  const colorPreview = document.getElementById('colorPreview');
+  const colorForm = document.getElementById('colorForm');
+
+  function validateColorCode() {
+    const regex = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
+    const value = colorInput.value.trim();
+    if (value === '') {
+      colorMsg.textContent = '';
+      colorPreview.style.background = 'transparent';
+      return false;
+    }
+    if (regex.test(value)) {
+      colorMsg.textContent = '';
+      colorPreview.style.background = value;
+      return true;
+    } else {
+      colorMsg.textContent = 'Invalid hex color code.';
+      colorMsg.style.color = 'red';
+      colorPreview.style.background = 'transparent';
+      return false;
+    }
+  }
+
+  colorInput.addEventListener('input', validateColorCode);
+
+  colorForm.addEventListener('submit', function(e) {
+    if (!validateColorCode()) {
+      e.preventDefault();
+      colorMsg.textContent = 'Invalid hex color code.';
+      colorMsg.style.color = 'red';
+    }
+  });
+
+  // ...existing code...
+</script>
+<!-- ...existing code...

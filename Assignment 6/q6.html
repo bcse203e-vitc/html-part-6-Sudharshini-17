@@ -1,0 +1,47 @@
+<!-- ...existing code... -->
+<h2>Set Your Username</h2>
+<form id="usernameForm">
+  <label>
+    Username:
+    <input type="text" id="username" required />
+    <span id="usernameMsg" class="error"></span>
+  </label><br><br>
+  <button type="submit">Submit</button>
+</form>
+<!-- ...existing code... -->
+<script>
+  // ...existing code...
+
+  const usernameInput = document.getElementById('username');
+  const usernameMsg = document.getElementById('usernameMsg');
+  const usernameForm = document.getElementById('usernameForm');
+
+  function validateUsername() {
+    const regex = /^[a-zA-Z0-9_]{3,16}$/;
+    if (usernameInput.value.trim() === '') {
+      usernameMsg.textContent = '';
+      return false;
+    }
+    if (regex.test(usernameInput.value)) {
+      usernameMsg.textContent = '';
+      return true;
+    } else {
+      usernameMsg.textContent = 'Username must be 3-16 characters, only letters, numbers, and underscores.';
+      usernameMsg.style.color = 'red';
+      return false;
+    }
+  }
+
+  usernameInput.addEventListener('input', validateUsername);
+
+  usernameForm.addEventListener('submit', function(e) {
+    if (!validateUsername()) {
+      e.preventDefault();
+      usernameMsg.textContent = 'Username must be 3-16 characters, only letters, numbers, and underscores.';
+      usernameMsg.style.color = 'red';
+    }
+  });
+
+  // ...existing code...
+</script>
+<!-- ...existing code...

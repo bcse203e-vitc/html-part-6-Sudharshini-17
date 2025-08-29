@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dynamic Registration Form</title>
+    <style>
+        .error { color: red; font-size: 0.9em; }
+        input:invalid { border-color: red; }
+        input:valid { border-color: green; }
+    </style>
+</head>
+<body>
+    <form id="registrationForm" novalidate>
+        <label>
+            Name:
+            <input type="text" name="name" id="name" required>
+            <span class="error" id="nameError"></span>
+        </label><br><br>
+        <label>
+            Email:
+            <input type="email" name="email" id="email" required>
+            <span class="error" id="emailError"></span>
+        </label><br><br>
+        <label>
+            Password:
+            <input type="password" name="password" id="password" required>
+            <span class="error" id="passwordError"></span>
+        </label><br><br>
+        <button type="submit" id="submitBtn" disabled>Submit</button>
+    </form>
+
+    <script>
+        const form = document.getElementById('registrationForm');
+        const submitBtn = document.getElementById('submitBtn');
+
+        function validateField(field) {
+            const value = field.value.trim();
+            let error = '';
+            if (field.name === 'name') {
+                if (!value) error = 'Name is required.';
+            }
+            if (field.name === 'email') {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!value) error = 'Email is required.';
+                else if (!emailRegex.test(value)) error = 'Invalid email format.';
+            }
+            if (field.name === 'password') {
+                const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
+                if (!value) error = 'Password is required.';
+                else if (!passwordRegex.test(value)) error = 'Password must be at least 8 characters, include one uppercase letter and one number.';
+            }
+            document.getElementById(field.name + 'Error').textContent = error;
+            return !error;
+        }
+
+        function validateForm() {
+            const fields = form.querySelectorAll('input');
+            let allValid = true;
+            fields.forEach(field => {
+                if (!validateField(field)) allValid = false;
+            });
+            submitBtn.disabled = !allValid;
+        }
+
+        form.addEventListener('input', validateForm);
+
+        form.addEventListener('blur', function(e) {
+            if (e.target.tagName === 'INPUT') {
+                validateField(e.target);
+            }
+        }, true);
+
+        form.addEventListener('submit', function(e) {
+            validateForm();
+            if (submitBtn.disabled) e.preventDefault();
+        });
+    </script>
+</body>
+</html>

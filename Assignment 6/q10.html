@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dynamic Form Builder</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 500px;
+      margin: 40px auto;
+      padding: 10px;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    input[type="text"], input[type="email"], input[type="password"] {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      box-sizing: border-box;
+    }
+    .error {
+      color: red;
+      font-size: 0.9em;
+      margin-top: 2px;
+    }
+    .input-group {
+      margin-bottom: 15px;
+    }
+    button {
+      margin-top: 10px;
+      padding: 8px 15px;
+      font-size: 1em;
+    }
+    #result {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h2>Dynamic Form Builder</h2>
+
+  <label for="inputType">Select Input Type:</label>
+  <select id="inputType">
+    <option value="text">Text</option>
+    <option value="email">Email</option>
+    <option value="password">Password</option>
+  </select>
+  <button id="addInputBtn">Add Input</button>
+
+  <form id="dynamicForm" novalidate>
+    <h3>Generated Form:</h3>
+    <div id="formInputs"></div>
+    <button type="submit">Submit</button>
+  </form>
+
+  <div id="result"></div>
+
+  <script>
+    const inputTypeSelect = document.getElementById('inputType');
+    const addInputBtn = document.getElementById('addInputBtn');
+    const formInputsDiv = document.getElementById('formInputs');
+    const dynamicForm = document.getElementById('dynamicForm');
+    const resultDiv = document.getElementById('result');
+
+    // Keep track of input count for unique IDs
+    let inputCount = 0;
+
+    // Regex for validation
+    const validationRules = {
+      text: /^[\w\s]{1,50}$/, // Letters, numbers, spaces; 1-50 chars
+      email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, // basic email regex
+      password: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/ // min 6 chars, at least one letter and one number
+    };
+
+    // Error messages for each input type
+    const errorMessages = {
+      text: "Text must be 1-50 characters, letters/numbers/spaces only.",
+      email: "Please enter a valid email address.",
+      password: "Password must be at least 6 characters, including letters and numbers."
+    };
+
+    // Function to create and append input dynamically
+    function addInput() {
+      const selectedType = inputTypeSelect.value;
+      inputCount++;
+
+      const inputGroup = document.createElement('div');
+      inputGroup.className = 'input-group';
+      inputGroup.dataset.inputType = selectedType;
+
+      const label = document.createElement('label');
+      label.htmlFor = `input_${inputCount}`;
+      label.textContent = `Enter ${selectedType.charAt(0).toUpperCase() + selectedType.slice(1)}:`;
+
+      const input = document.createElement('input');
+      input.type = selectedType;
+      input.id = `input_${inputCount}`;
+      input.name = `input_${inputCount}`;
+      input.dataset.type = selectedType;
+      input.required = true;
+
+      // Error message element
+      const error = document.createElement('div');
+      error.className = 'error';
+      error.style.display = 'none';
+
+      inputGroup.appendChild(label);
+      inputGroup.appendChild(input);
+      inputGroup.appendChild(error);
+
+      formInputsDiv.appendChild(inputGroup);
+    }
+
+    // Validate inputs on submit
+    function validateForm(event) {
+      event.preventDefault();
+
+      let allValid = true;
+      resultDiv.textContent = "";
+
+      // Loop through all inputs
+      const inputGroups = formInputsDiv.querySelectorAll('.input-group');
+      inputGroups.forEach(group => {
+        const input = group.querySelector('input');
+        const errorDiv = group.querySelector('.error');
+        const type = input.dataset.type;
+        const value = input.value.trim();
+        const regex = validationRules[type];
+
+        if (!regex.test(value)) {
+          allValid = false;
+          errorDiv.textContent = errorMessages[type];
+          errorDiv.style.display = 'block';
+        } else {
+          errorDiv.textContent = '';
+          errorDiv.style.display = 'none';
+        }
+      });
+
+      if (allValid) {
+        resultDiv.style.color = 'green';
+        resultDiv.textContent = 'Form submitted successfully!';
+        dynamicForm.reset();
+        formInputsDiv.innerHTML = ''; // Optionally clear form after submit
+        inputCount = 0;
+      } else {
+        resultDiv.style.color = 'red';
+        resultDiv.textContent = 'Please correct the errors above.';
+      }
+    }
+
+    // Event listeners
+    addInputBtn.addEventListener('click', addInput);
+    dynamicForm.addEventListener('submit', validateForm);
+  </script>
+</body>
+</html>

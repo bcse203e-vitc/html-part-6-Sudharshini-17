@@ -1,0 +1,30 @@
+<!-- ...existing code... -->
+<label>
+    Email:
+    <input type="email" name="email" id="email" required>
+    <span class="error" id="emailError"></span>
+    <span id="emailMsg"></span>
+</label><br><br>
+<!-- ...existing code... -->
+<script>
+    // ...existing code...
+
+    const emailInput = document.getElementById('email');
+    const emailMsg = document.getElementById('emailMsg');
+
+    emailInput.addEventListener('blur', function() {
+        const emailRegex = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+        if (emailInput.value.trim() === '') {
+            emailMsg.textContent = '';
+        } else if (emailRegex.test(emailInput.value)) {
+            emailMsg.textContent = 'Valid email!';
+            emailMsg.style.color = 'green';
+        } else {
+            emailMsg.textContent = 'Invalid email format.';
+            emailMsg.style.color = 'red';
+        }
+    });
+
+    // ...existing code...
+</script>
+<!-- ...existing code... -->

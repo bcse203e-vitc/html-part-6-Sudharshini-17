@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dynamic Country Dropdown</title>
+</head>
+<body>
+  <h2>Select Continent and Country</h2>
+
+  <label for="continent">Continent:</label>
+  <select id="continent">
+    <option value="">--Select Continent--</option>
+  </select>
+
+  <br /><br />
+
+  <label for="country">Country:</label>
+  <select id="country" disabled>
+    <option value="">--Select Country--</option>
+  </select>
+
+  <script>
+    // Data structure for continents and countries
+    const continentCountryMap = {
+      "Africa": ["Nigeria", "Egypt", "South Africa", "Kenya"],
+      "Asia": ["China", "India", "Japan", "South Korea"],
+      "Europe": ["Germany", "France", "United Kingdom", "Italy"],
+      "North America": ["United States", "Canada", "Mexico"],
+      "South America": ["Brazil", "Argentina", "Colombia"],
+      "Oceania": ["Australia", "New Zealand", "Fiji"],
+      "Antarctica": []
+    };
+
+    const continentSelect = document.getElementById("continent");
+    const countrySelect = document.getElementById("country");
+
+    // Populate continent dropdown
+    function populateContinents() {
+      for (const continent in continentCountryMap) {
+        const option = document.createElement("option");
+        option.value = continent;
+        option.textContent = continent;
+        continentSelect.appendChild(option);
+      }
+    }
+
+    // Update country dropdown based on selected continent
+    function updateCountries() {
+      const selectedContinent = continentSelect.value;
+
+      // Clear previous options
+      countrySelect.innerHTML = '<option value="">--Select Country--</option>';
+
+      if (selectedContinent && continentCountryMap[selectedContinent].length > 0) {
+        countrySelect.disabled = false;
+        const countries = continentCountryMap[selectedContinent];
+        countries.forEach(country => {
+          const option = document.createElement("option");
+          option.value = country;
+          option.textContent = country;
+          countrySelect.appendChild(option);
+        });
+      } else {
+        countrySelect.disabled = true;
+      }
+    }
+
+    // Initialize
+    populateContinents();
+
+    // Event listener for continent dropdown change
+    continentSelect.addEventListener("change", updateCountries);
+  </script>
+</body>
+</html>

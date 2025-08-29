@@ -1,0 +1,30 @@
+<!-- ...existing code... -->
+<label>
+    Phone:
+    <input type="text" name="phone" id="phone" required>
+    <span id="phoneMsg"></span>
+</label><br><br>
+<!-- ...existing code... -->
+<script>
+    // ...existing code...
+
+    const phoneInput = document.getElementById('phone');
+    const phoneMsg = document.getElementById('phoneMsg');
+
+    phoneInput.addEventListener('input', function() {
+        // US phone formats: (123) 456-7890 or 123-456-7890
+        const phoneRegex = /^(\(\d{3}\)\s|\d{3}-)\d{3}-\d{4}$/;
+        if (phoneInput.value.trim() === '') {
+            phoneMsg.textContent = '';
+        } else if (phoneRegex.test(phoneInput.value)) {
+            phoneMsg.textContent = 'Valid phone number!';
+            phoneMsg.style.color = 'green';
+        } else {
+            phoneMsg.textContent = 'Invalid phone number format.';
+            phoneMsg.style.color = 'red';
+        }
+    });
+
+    // ...existing code...
+</script>
+<!-- ...existing code... -->

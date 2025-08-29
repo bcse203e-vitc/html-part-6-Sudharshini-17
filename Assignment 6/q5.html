@@ -1,0 +1,50 @@
+<!-- ...existing code... -->
+<h2>Set Your Password</h2>
+<form id="passwordForm">
+  <label>
+    Password:
+    <input type="password" id="password" required />
+  </label><br><br>
+  <label>
+    Confirm Password:
+    <input type="password" id="confirmPassword" required />
+  </label>
+  <span id="matchMsg"></span><br><br>
+  <button type="submit">Submit</button>
+</form>
+<!-- ...existing code... -->
+<script>
+  // ...existing code...
+
+  const password = document.getElementById('password');
+  const confirmPassword = document.getElementById('confirmPassword');
+  const matchMsg = document.getElementById('matchMsg');
+
+  function checkPasswords() {
+    if (!password.value && !confirmPassword.value) {
+      matchMsg.textContent = '';
+      return;
+    }
+    if (password.value === confirmPassword.value) {
+      matchMsg.textContent = 'Passwords match';
+      matchMsg.style.color = 'green';
+    } else {
+      matchMsg.textContent = 'Passwords do not match';
+      matchMsg.style.color = 'red';
+    }
+  }
+
+  password.addEventListener('input', checkPasswords);
+  confirmPassword.addEventListener('input', checkPasswords);
+
+  document.getElementById('passwordForm').addEventListener('submit', function(e) {
+    if (password.value !== confirmPassword.value) {
+      e.preventDefault();
+      matchMsg.textContent = 'Passwords do not match';
+      matchMsg.style.color = 'red';
+    }
+  });
+
+  // ...existing code...
+</script>
+<!-- ...existing code... -->
